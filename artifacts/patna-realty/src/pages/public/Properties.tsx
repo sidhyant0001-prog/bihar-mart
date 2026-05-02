@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { useListProperties } from "@workspace/api-client-react";
+import type { Property } from "@workspace/api-client-react";
 import { formatINR } from "@/lib/format";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
@@ -67,7 +68,7 @@ function StatBar({ total, occupied, avgRent, forSale, t }: {
   );
 }
 
-function MapView({ properties, t }: { properties: ReturnType<typeof useListProperties>["data"]; t: ReturnType<typeof useLang>["t"] }) {
+function MapView({ properties, t }: { properties: Property[]; t: ReturnType<typeof useLang>["t"] }) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<unknown>(null);
 
@@ -140,7 +141,7 @@ function MapView({ properties, t }: { properties: ReturnType<typeof useListPrope
 }
 
 function PropertyCard({ property, index, t }: {
-  property: NonNullable<ReturnType<typeof useListProperties>["data"]>[0];
+  property: Property;
   index: number;
   t: ReturnType<typeof useLang>["t"];
 }) {

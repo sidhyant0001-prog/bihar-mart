@@ -1,5 +1,5 @@
 import { TenantLayout } from "@/components/layout/TenantLayout";
-import { useListMaintenanceRequests, useCreateMaintenanceRequest, getListMaintenanceRequestsQueryKey } from "@workspace/api-client-react";
+import { useListMaintenanceRequests, useCreateMaintenanceRequest, getListMaintenanceRequestsQueryKey, getListMaintenanceRequestsQueryKey as getMRQueryKey } from "@workspace/api-client-react";
 import { getSession } from "@/lib/auth";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ export default function TenantMaintenance() {
   const session = getSession();
   const tenantId = session?.user?.id;
   // In a real app we'd need propertyId from the user's lease. For now we use a mock/first property id.
-  const { data: requests, isLoading } = useListMaintenanceRequests({ tenantId }, { query: { enabled: !!tenantId } });
+  const { data: requests, isLoading } = useListMaintenanceRequests({ tenantId }, { query: { enabled: !!tenantId, queryKey: getMRQueryKey({ tenantId }) } });
   
   return (
     <TenantLayout>

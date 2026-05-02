@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "wouter";
 import { Navbar } from "@/components/layout/Navbar";
-import { useGetProperty, useCreateInquiry } from "@workspace/api-client-react";
+import { useGetProperty, useCreateInquiry, getGetPropertyQueryKey } from "@workspace/api-client-react";
 import { formatINR } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ const STATUS_COLORS: Record<string, string> = {
 export default function PropertyDetail() {
   const params = useParams();
   const id = Number(params.id);
-  const { data: property, isLoading } = useGetProperty(id, { query: { enabled: !!id } });
+  const { data: property, isLoading } = useGetProperty(id, { query: { enabled: !!id, queryKey: getGetPropertyQueryKey(id) } });
   const { t } = useLang();
   const D = t.detail;
   const { toast } = useToast();

@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 export default function TenantPayments() {
   const session = getSession();
   const tenantId = session?.user?.id;
-  const { data: payments, isLoading } = useListPayments({ tenantId }, { query: { enabled: !!tenantId } });
+  const { data: payments, isLoading } = useListPayments({ tenantId }, { query: { enabled: !!tenantId, queryKey: getListPaymentsQueryKey({ tenantId }) } });
   const processPayment = useProcessPayment();
   const queryClient = useQueryClient();
   const { toast } = useToast();

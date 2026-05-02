@@ -631,6 +631,24 @@ export interface ActivityItem {
   entityId?: number | null;
 }
 
+export interface RequestUploadUrlBody {
+  name: string;
+  size: number;
+  contentType: string;
+}
+
+export type RequestUploadUrlResponseMetadata = {
+  name: string;
+  size: number;
+  contentType: string;
+};
+
+export interface RequestUploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+  metadata: RequestUploadUrlResponseMetadata;
+}
+
 export type ListPropertiesParams = {
   type?: ListPropertiesType;
   status?: ListPropertiesStatus;

@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { getSession, clearSession } from "@/lib/auth";
 import { useEffect } from "react";
-import { useListLeases, useListPayments, useListMaintenanceRequests } from "@workspace/api-client-react";
+import { useListLeases, useListPayments, useListMaintenanceRequests, getListLeasesQueryKey, getListPaymentsQueryKey } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -16,8 +16,8 @@ export default function TenantDashboard() {
   }, [session, setLocation]);
 
   const tenantId = session?.user?.id;
-  const { data: leases, isLoading: loadingLeases } = useListLeases({ tenantId }, { query: { enabled: !!tenantId } });
-  const { data: payments, isLoading: loadingPayments } = useListPayments({ tenantId }, { query: { enabled: !!tenantId } });
+  const { data: leases, isLoading: loadingLeases } = useListLeases({ tenantId }, { query: { enabled: !!tenantId, queryKey: getListLeasesQueryKey({ tenantId }) } });
+  const { data: payments, isLoading: loadingPayments } = useListPayments({ tenantId }, { query: { enabled: !!tenantId, queryKey: getListPaymentsQueryKey({ tenantId }) } });
 
   if (loadingLeases || loadingPayments) return <div className="p-8">Loading your portal...</div>;
 

@@ -8,10 +8,12 @@ import paymentsRouter from "./payments";
 import maintenanceRouter from "./maintenance";
 import inquiriesRouter from "./inquiries";
 import dashboardRouter from "./dashboard";
+import storageRouter from "./storage";
 
 const router: IRouter = Router();
 
 router.use(healthRouter);
+router.use(storageRouter);
 router.use(authRouter);
 router.use(propertiesRouter);
 router.use(tenantsRouter);
