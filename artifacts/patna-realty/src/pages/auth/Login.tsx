@@ -1,4 +1,3 @@
-import { useState } from "wouter";
 import { Link, useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/lib/i18n";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -20,6 +20,8 @@ export default function Login() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const loginMutation = useLogin();
+  const { t } = useLang();
+  const L = t.auth.login;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,7 +32,7 @@ export default function Login() {
     loginMutation.mutate({ data: values }, {
       onSuccess: (data) => {
         setSession({ user: data.user, token: data.token, role: data.user.role });
-        toast({ title: "Login successful" });
+        toast({ title: L.successTitle });
         if (data.user.role === "admin") {
           setLocation("/admin");
         } else if (data.user.role === "tenant" || data.user.role === "shopkeeper") {
@@ -40,7 +42,7 @@ export default function Login() {
         }
       },
       onError: (err) => {
-        toast({ title: "Login failed", description: err.message, variant: "destructive" });
+        toast({ title: L.failTitle, description: err.message, variant: "destructive" });
       }
     });
   };
@@ -49,8 +51,8 @@ export default function Login() {
     <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>Login to manage your property</CardDescription>
+          <CardTitle className="text-2xl">{L.title}</CardTitle>
+          <CardDescription>{L.subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -60,8 +62,8 @@ export default function Login() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl><Input placeholder="email@example.com" {...field} /></FormControl>
+                    <FormLabel>{L.email}</FormLabel>
+                    <FormControl><Input placeholder={L.emailPlaceholder} {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -71,19 +73,20 @@ export default function Login() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl><Input type="password" placeholder="********" {...field} /></FormControl>
+                    <FormLabel>{L.password}</FormLabel>
+                    <FormControl><Input type="password" placeholder={L.passwordPlaceholder} {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
-                {loginMutation.isPending ? "Logging in..." : "Login"}
+                {loginMutation.isPending ? L.loading : L.btn}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Don't have an account? <Link href="/register" className="text-primary hover:underline">Register</Link>
+            {L.noAccount}{" "}
+            <Link href="/register" className="text-primary hover:underline">{L.register}</Link>
           </div>
         </CardContent>
       </Card>

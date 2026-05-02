@@ -10,11 +10,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useLang } from "@/lib/i18n";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(6),
   role: z.enum(["tenant", "shopkeeper", "buyer"] as const),
 });
 
@@ -22,6 +23,8 @@ export default function Register() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const registerMutation = useRegister();
+  const { t } = useLang();
+  const R = t.auth.register;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,11 +35,11 @@ export default function Register() {
     registerMutation.mutate({ data: values }, {
       onSuccess: (data) => {
         setSession({ user: data.user, token: data.token, role: data.user.role });
-        toast({ title: "Registration successful" });
+        toast({ title: R.successTitle });
         setLocation(data.user.role === "buyer" ? "/" : "/tenant");
       },
       onError: (err) => {
-        toast({ title: "Registration failed", description: err.message, variant: "destructive" });
+        toast({ title: R.failTitle, description: err.message, variant: "destructive" });
       }
     });
   };
@@ -45,31 +48,43 @@ export default function Register() {
     <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create an Account</CardTitle>
-          <CardDescription>Join Patna Complex to find or manage your property</CardDescription>
+          <CardTitle className="text-2xl">{R.title}</CardTitle>
+          <CardDescription>{R.subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField control={form.control} name="name" render={({ field }) => (
-                <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel>{R.name}</FormLabel><FormControl><Input placeholder={R.namePlaceholder} {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="email" render={({ field }) => (
-                <FormItem><FormLabel>Email</FormLabel><FormControl><Input placeholder="john@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel>{R.email}</FormLabel><FormControl><Input placeholder={R.emailPlaceholder} {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="password" render={({ field }) => (
-                <FormItem><FormLabel>Password</FormLabel><FormControl><Input type="password" placeholder="********" {...field} /></FormControl><FormMessage /></FormItem>
+                <FormItem><FormLabel>{R.password}</FormLabel><FormControl><Input type="password" placeholder="••••••••" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
               <FormField control={form.control} name="role" render={({ field }) => (
-                <FormItem><FormLabel>I am a...</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select a role" /></SelectTrigger></FormControl><SelectContent><SelectItem value="buyer">Prospective Buyer/Tenant</SelectItem><SelectItem value="tenant">Current Resident (Flat)</SelectItem><SelectItem value="shopkeeper">Current Shopkeeper</SelectItem></SelectContent></Select><FormMessage /></FormItem>
+                <FormItem>
+                  <FormLabel>{R.role}</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl><SelectTrigger><SelectValue placeholder={R.rolePlaceholder} /></SelectTrigger></FormControl>
+                    <SelectContent>
+                      <SelectItem value="buyer">{R.buyer}</SelectItem>
+                      <SelectItem value="tenant">{R.tenant}</SelectItem>
+                      <SelectItem value="shopkeeper">{R.shopkeeper}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )} />
               <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
-                {registerMutation.isPending ? "Creating account..." : "Register"}
+                {registerMutation.isPending ? R.loading : R.btn}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Already have an account? <Link href="/login" className="text-primary hover:underline">Login</Link>
+            {R.hasAccount}{" "}
+            <Link href="/login" className="text-primary hover:underline">{R.login}</Link>
           </div>
         </CardContent>
       </Card>
