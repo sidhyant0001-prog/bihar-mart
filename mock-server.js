@@ -16,10 +16,10 @@ const properties = [
 ];
 
 const tenants = [
-  {id:1,name:'Rajesh Kumar',email:'rajesh@example.com',phone:'9876543210',role:'tenant',propertyId:2,moveInDate:'2024-01-15'},
-  {id:2,name:'Sunita Devi',email:'sunita@example.com',phone:'9876543211',role:'tenant',propertyId:4,moveInDate:'2024-03-01'},
-  {id:3,name:'Amit Singh',email:'amit@example.com',phone:'9876543212',role:'tenant',propertyId:7,moveInDate:'2023-11-10'},
-  {id:4,name:'Priya Sharma',email:'priya@example.com',phone:'9876543213',role:'tenant',propertyId:10,moveInDate:'2024-02-20'}
+  {id:1,name:'Suresh Prasad',email:'suresh@example.com',phone:'9876543210',aadhaarNumber:'1234-5678-9012',emergencyContact:'9876509876',propertyId:2,status:'active',joinedAt:'2024-01-15'},
+  {id:2,name:'Meena Devi',email:'meena@example.com',phone:'9876543211',aadhaarNumber:'2345-6789-0123',emergencyContact:'9876508765',propertyId:4,status:'active',joinedAt:'2024-03-01'},
+  {id:3,name:'Priya Singh',email:'priya@example.com',phone:'9876543212',aadhaarNumber:'3456-7890-1234',emergencyContact:'9876507654',propertyId:7,status:'active',joinedAt:'2024-02-10'},
+  {id:4,name:'Rahul Gupta',email:'rahul@example.com',phone:'9876543213',aadhaarNumber:'4567-8901-2345',emergencyContact:'9876506543',propertyId:12,status:'inactive',joinedAt:'2023-11-05'}
 ];
 
 const users = [
