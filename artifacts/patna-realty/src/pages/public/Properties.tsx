@@ -242,7 +242,7 @@ export default function Properties() {
   const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
-    if (!properties) return [];
+    if (!Array.isArray(properties)) return [];
     return properties.filter((p) => {
       if (search && !p.name.toLowerCase().includes(search.toLowerCase()) &&
         !p.locality?.toLowerCase().includes(search.toLowerCase())) return false;
@@ -263,7 +263,7 @@ export default function Properties() {
   }, [properties, search, typeFilter, statusFilter, priceFilter]);
 
   const stats = useMemo(() => {
-    if (!properties) return { total: 0, occupied: 0, avgRent: 0, forSale: 0 };
+    if (!Array.isArray(properties)) return { total: 0, occupied: 0, avgRent: 0, forSale: 0 };
     const rents = properties.filter((p) => p.rentPrice).map((p) => p.rentPrice!);
     return {
       total: properties.length,
